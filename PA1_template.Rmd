@@ -98,3 +98,27 @@ median(fill_steps_daily$steps)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Split data
+```{r factor.weekend}
+factor.weekend <- function(dates) {
+    dates = weekdays(as.Date(dates, format='%Y-%m-%d'))
+    idx = which(dates == "Saturday" | dates == "Sunday")
+    dates = rep("weekday", length(dates))
+    dates[idx] = "weekend"
+    dates
+}
+```
+Plot average steps between weekday and weekend
+```{r split_plot}
+day = factor.weekend(fill_data$date)
+fill_data = cbind(fill_data, day)
+avg_step_wk = aggregate(steps ~ interval + day, data=fill_data, mean)
+
+ggplot(data = avg_step_wk) + 
+    geom_line(aes(x = interval, y = steps, color=day)) + 
+    xlab("interval") + ylab("Avg steps") + facet_grid(day ~ .)
+```
+
+
+
