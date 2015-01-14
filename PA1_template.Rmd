@@ -7,11 +7,27 @@ output:
 
 
 ## Loading and preprocessing the data
+Read data from csv file.
+```{r read_data}
+raw_data = read.csv("data/activity.csv")
+summary(raw_data)
+```
+Remove NA
 
-
+```{r remove_na}
+data = raw_data[complete.cases(raw_data),]
+summary(data)
+```
 
 ## What is mean total number of steps taken per day?
 
+1) Histogram of the total number of steps taken each day
+```{r hist_steps_daily}
+steps_daily = aggregate(steps ~ date, data=data, sum)
+hist(steps_daily$steps, xlab = "steps", main="Total number of steps each day")
+```
+
+2) Calculate and report the mean and median total number of steps taken per day
 
 
 ## What is the average daily activity pattern?
