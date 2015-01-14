@@ -36,30 +36,22 @@ median(steps_daily$steps)
 ## What is the average daily activity pattern?
 1) Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r avg_steps_daily}
+```{r avg_steps_int}
 # Calculate mean across date
-avg_steps_daily = aggregate(steps ~ date, data=data, mean)
+avg_steps_int = aggregate(steps ~ interval, data=data, mean)
 
 # Calculate max steps
-max_step = max(avg_steps_daily$steps)
-max_idx = which(avg_steps_daily$steps == max_step)
-
-require('xts')
-# Convert to time serie object
-avg_steps_daily = xts(avg_steps_daily[]["steps"], as.Date(avg_steps_daily$date, format='%Y-%m-%d'))
-data_plot = data.frame(
-    "date" = index(avg_steps_daily),
-    "steps" = avg_steps_daily$steps
-    )
+max_step = max(avg_steps_int$steps)
+max_idx = which(avg_steps_int$steps == max_step)
 
 require("ggplot2")
-ggplot(data = data_plot) + 
-  geom_line(aes(x = date, y = steps)) + xlab("") + ylab("Avg steps")                                          
+ggplot(data = avg_steps_int) + 
+  geom_line(aes(x = interval, y = steps)) + xlab("interval") + ylab("Avg steps") 
 ```
 
 2) Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 ```{r}
-avg_steps_daily[max_idx,]
+avg_steps_int[max_idx,]
 ```
 
 ## Imputing missing values
@@ -109,7 +101,7 @@ factor.weekend <- function(dates) {
     dates
 }
 ```
-Plot average steps between weekday and weekend
+Plot average steps between weekday and weekend shows that steps in weekday is much higher in the morning that weekend. 
 ```{r split_plot}
 day = factor.weekend(fill_data$date)
 fill_data = cbind(fill_data, day)
