@@ -34,7 +34,6 @@ median(steps_daily$steps)
 ```
 
 ## What is the average daily activity pattern?
-ß
 1) Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ```{r avg_steps_daily}
@@ -65,6 +64,37 @@ avg_steps_daily[max_idx,]
 
 ## Imputing missing values
 
+1) The total number of missing values in the dataset
+```{r na_idx}
+na_idx = which(!complete.cases(raw_data))
+length(na_idx)
+```
 
+2) Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+We can replace all NA values with mean of steps per day
+``` {r } 
+avg_steps = mean(data$steps)
+avg_steps
+```
+
+3) Create a new dataset that is equal to the original dataset but with the missing data filled in.
+``` {r } 
+fill_data = raw_data
+fill_data$steps[na_idx] = avg_steps
+summary(fill_data)
+```
+
+4) Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+``` {r hist_fill}
+fill_steps_daily = aggregate(steps ~ date, data=fill_data, sum)
+hist(fill_steps_daily$steps, xlab = "steps", main="Total number of steps each day (NA filled)")
+```
+
+The median of data is changed but mean remain the same. Histogram shows that data distribution is more skewed at the center.
+```{r fill_steps_mean_median}
+mean(fill_steps_daily$steps)
+median(fill_steps_daily$steps)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
