@@ -27,8 +27,11 @@ steps_daily = aggregate(steps ~ date, data=data, sum)
 hist(steps_daily$steps, xlab = "steps", main="Total number of steps each day")
 ```
 
-2) Calculate and report the mean and median total number of steps taken per day
-
+2) Mean and median total number of steps taken per day
+```{r steps_mean_median}
+mean(steps_daily$steps)
+median(steps_daily$steps)
+```
 
 ## What is the average daily activity pattern?
 
